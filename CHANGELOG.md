@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.5.24](https://github.com/andthexi/valleyed/compare/v4.5.23...v4.5.24) (2026-11-11)
+
+
+### Bug Fixes
+
+* **release:** update repository url after github rename ([13777c0](https://github.com/andthexi/valleyed/commit/13777c0de9b38649237c0f3415ae7e8a60b921b6))
+
 ### [4.5.23](https://github.com/kevinand11/valleyed/compare/v4.5.22...v4.5.23) (2026-06-30)
 
 
