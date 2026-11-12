@@ -25,20 +25,21 @@
 	"types": "./dist/types/index.d.ts",
 	"exports": {
 		".": {
-			"types": "./dist/types/index.d.ts",
 			"require": {
+				"types": "./dist/types/index.d.cts",
 				"min": "./dist/cjs/index.min.cjs",
 				"default": "./dist/cjs/index.cjs"
 			},
 			"import": {
+				"types": "./dist/types/index.d.ts",
 				"min": "./dist/esm/index.min.mjs",
 				"default": "./dist/esm/index.mjs"
 			}
 		}
 	},
 	"scripts": {
-		"dev": "tsup --watch",
-		"build": "tsup",
+		"dev": "tsdown --watch --concurrency 1",
+		"build": "tsdown --concurrency 1",
 		"lint": "eslint src tests",
 		"lint:fix": "eslint --fix src tests",
 		"format": "prettier --write .",
@@ -64,11 +65,10 @@
 		"@types/node": "^24.0.0",
 		"@types/url-regex-safe": "^1.0.2",
 		"commit-and-tag-version": "^13.3.0",
-		"esbuild-fix-imports-plugin": "^1.0.23",
 		"eslint": "10.14.0",
 		"husky": "^9.1.7",
 		"prettier": "3.10.1",
-		"tsup": "^8.5.1",
+		"tsdown": "0.23.7",
 		"typescript": "^5.9.3",
 		"vitest": "^4.0.18",
 		"xi-configs": "0.1.0"

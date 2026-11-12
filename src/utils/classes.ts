@@ -16,25 +16,7 @@ type Accessor<Keys extends object> = {
 	set: <Key extends keyof Keys>(key: Key, value: Keys[Key], keysObj: Keys) => void
 }
 
-function WrapWithProperties(): { new <Keys extends Record<string, unknown>>(): Keys } {
-	return class {
-		[customInspectSymbol](_depth: number, options: util.InspectOptionsStylized, inspect: typeof util.inspect) {
-			options.getters = true
-			options.numericSeparator = true
-			options.depth = Number.MAX_SAFE_INTEGER
-			return (
-				options.stylize(this.constructor.name, 'special') +
-				' ' +
-				inspect((this as any).toJSON?.() ?? this, options)
-			)
-		}
-	} as any
-}
-
-// @ts-expect-error invalid extends
-class __Root<Keys extends object> extends WrapWithProperties()<Keys> {}
-
-export class DataClass<Keys extends object> extends __Root<Keys> {
+class DataClassImpl<Keys extends object> {
 	constructor(
 		keys: Keys,
 		access: Accessor<Keys> = {
@@ -44,7 +26,6 @@ export class DataClass<Keys extends object> extends __Root<Keys> {
 			},
 		},
 	) {
-		super()
 		Object.keys(keys).forEach((key) => {
 			Object.defineProperty(this, key, {
 				get: () => access.get(key as keyof Keys, keys),
@@ -55,6 +36,15 @@ export class DataClass<Keys extends object> extends __Root<Keys> {
 				configurable: true,
 			})
 		})
+	}
+
+	[customInspectSymbol](_depth: number, options: util.InspectOptionsStylized, inspect: typeof util.inspect) {
+		options.getters = true
+		options.numericSeparator = true
+		options.depth = Number.MAX_SAFE_INTEGER
+		return (
+			options.stylize(this.constructor.name, 'special') + ' ' + inspect((this as any).toJSON?.() ?? this, options)
+		)
 	}
 
 	toJSON(): JSONValueOf<Keys> {
@@ -71,4 +61,10 @@ export class DataClass<Keys extends object> extends __Root<Keys> {
 	toString() {
 		return JSON.stringify(this.toJSON())
 	}
+}
+
+export type DataClass<Keys extends object> = DataClassImpl<Keys> & Keys
+
+export const DataClass = DataClassImpl as {
+	new <Keys extends object>(keys: Keys, access?: Accessor<Keys>): DataClass<Keys>
 }
