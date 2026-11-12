@@ -1,6 +1,6 @@
 {
 	"name": "valleyed",
-	"version": "4.5.24",
+	"version": "4.5.25",
 	"description": "A lightweight package with definitions for various validation rules, and helper services to consume said rules.",
 	"type": "module",
 	"sideEffects": false,
