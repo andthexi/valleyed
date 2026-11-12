@@ -22,7 +22,11 @@ function WrapWithProperties(): { new <Keys extends Record<string, unknown>>(): K
 			options.getters = true
 			options.numericSeparator = true
 			options.depth = Number.MAX_SAFE_INTEGER
-			return options.stylize(this.constructor.name, options) + ' ' + inspect((this as any).toJSON?.() ?? this, options)
+			return (
+				options.stylize(this.constructor.name, options) +
+				' ' +
+				inspect((this as any).toJSON?.() ?? this, options)
+			)
 		}
 	} as any
 }
@@ -58,7 +62,7 @@ export class DataClass<Keys extends object> extends __Root<Keys> {
 		Object.keys(this).forEach((key) => {
 			const value = this[key]
 			if (typeof value === 'function' || value === undefined) return
-			json[key] =  wrapInTryCatch(() => (value as any)?.toJSON?.() ?? structuredClone(value), value)
+			json[key] = wrapInTryCatch(() => (value as any)?.toJSON?.() ?? structuredClone(value), value)
 		})
 		return json as any
 	}

@@ -27,7 +27,9 @@ export const or = <T extends Pipe<any, any>[]>(branches: T) => {
 								`if (${validatedVarname} instanceof PipeError) {`,
 								`	${errorsVarname}.push(PipeError.path(${idx}, '${validatedVarname}', ${validatedVarname}))`,
 								...lines.map((l) => `	${l}`),
-								idx === branches.length - 1 ? `	${opts.wrapError.format(`PipeError.rootFrom(${errorsVarname})`)}` : '',
+								idx === branches.length - 1
+									? `	${opts.wrapError.format(`PipeError.rootFrom(${errorsVarname})`)}`
+									: '',
 								`}`,
 								`else ${input} = ${validatedVarname}`,
 							])
@@ -134,9 +136,12 @@ export const recursive = <T extends Pipe<any, any>>(pipeFn: () => T, $refId: str
 			if (!compiledBefore) return common
 			return [
 				`function ${fnVarname}(node) {`,
-				...compileNested({ opts: { ...opts, failEarly: true }, pipe: pipeFn(), input: 'node', errorType: 'return' }).map(
-					(l) => `	${l}`,
-				),
+				...compileNested({
+					opts: { ...opts, failEarly: true },
+					pipe: pipeFn(),
+					input: 'node',
+					errorType: 'return',
+				}).map((l) => `	${l}`),
 				`	return node`,
 				'}',
 				...common,

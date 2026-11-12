@@ -54,7 +54,9 @@ export const before = (compare: Timeable, err?: string) => {
 }
 
 export const asStamp = () =>
-	standard<Date, number>(({ input }) => [`${input} = ${input}.getTime()`], { schema: () => ({ type: 'integer', oneOf: undefined }) })
+	standard<Date, number>(({ input }) => [`${input} = ${input}.getTime()`], {
+		schema: () => ({ type: 'integer', oneOf: undefined }),
+	})
 export const asISOString = () =>
 	standard<Date, string>(({ input }) => [`${input} = ${input}.toISOString()`], {
 		schema: () => ({ type: 'string', format: 'date-time', oneOf: undefined }),

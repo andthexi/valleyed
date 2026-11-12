@@ -33,7 +33,8 @@ const normalizeDataURL = (urlString: string) => {
 
 	const normalizedMediaType = [...attributes]
 	if (isBase64) normalizedMediaType.push('base64')
-	if (normalizedMediaType.length > 0 || (mimeType && mimeType !== DATA_URL_DEFAULT_MIME_TYPE)) normalizedMediaType.unshift(mimeType)
+	if (normalizedMediaType.length > 0 || (mimeType && mimeType !== DATA_URL_DEFAULT_MIME_TYPE))
+		normalizedMediaType.unshift(mimeType)
 	return `data:${normalizedMediaType.join(';')},${isBase64 ? data.trim() : data}${hash ? `#${hash}` : ''}`
 }
 
@@ -41,7 +42,8 @@ export const normalizeUrl = (urlString: string) => {
 	urlString = urlString.trim()
 
 	if (/^data:/i.test(urlString)) return normalizeDataURL(urlString)
-	if (/^view-source:/i.test(urlString)) throw new Error('`view-source:` is not supported as it is a non-standard protocol')
+	if (/^view-source:/i.test(urlString))
+		throw new Error('`view-source:` is not supported as it is a non-standard protocol')
 
 	const hasRelativeProtocol = urlString.startsWith('//')
 	const isRelativeUrl = !hasRelativeProtocol && /^\.*\//.test(urlString)
@@ -81,7 +83,8 @@ export const normalizeUrl = (urlString: string) => {
 	const oldUrlString = urlString
 	urlString = urlObject.toString()
 
-	if (urlObject.pathname === '/' && !oldUrlString.endsWith('/') && urlObject.hash === '') urlString = urlString.replace(/\/$/, '')
+	if (urlObject.pathname === '/' && !oldUrlString.endsWith('/') && urlObject.hash === '')
+		urlString = urlString.replace(/\/$/, '')
 	if (urlObject.pathname === '/' && urlObject.hash === '') urlString = urlString.replace(/\/$/, '')
 
 	return urlString

@@ -23,7 +23,13 @@ type PipeChain<I, O> = {
 	<T1, T2>(fn1: Entry<O, T1>, fn2: Entry<T1, T2>): Pipe<I, T2>
 	<T1, T2, T3>(fn1: Entry<O, T1>, fn2: Entry<T1, T2>, f3: Entry<T2, T3>): Pipe<I, T3>
 	<T1, T2, T3, T4>(fn1: Entry<O, T1>, fn2: Entry<T1, T2>, f3: Entry<T2, T3>, f4: Entry<T3, T4>): Pipe<I, T4>
-	<T1, T2, T3, T4, T5>(fn1: Entry<O, T1>, fn2: Entry<T1, T2>, f3: Entry<T2, T3>, f4: Entry<T3, T4>, f5: Entry<T4, T5>): Pipe<I, T5>
+	<T1, T2, T3, T4, T5>(
+		fn1: Entry<O, T1>,
+		fn2: Entry<T1, T2>,
+		f3: Entry<T2, T3>,
+		f4: Entry<T3, T4>,
+		f5: Entry<T4, T5>,
+	): Pipe<I, T5>
 	<T1, T2, T3, T4, T5, T6>(
 		fn1: Entry<O, T1>,
 		fn2: Entry<T1, T2>,

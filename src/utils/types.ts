@@ -26,7 +26,7 @@ export type ConditionalObjectKeys<T> =
 			: T
 
 export class JSONRedacted<T> {
-	private constructor (public value: T) {}
+	private constructor(public value: T) {}
 	valueOf() {
 		return this.value
 	}
@@ -36,7 +36,7 @@ export class JSONRedacted<T> {
 	toJSON() {
 		return undefined as never
 	}
-	static from<T> (value: T | JSONRedacted<T>) {
+	static from<T>(value: T | JSONRedacted<T>) {
 		if (value instanceof JSONRedacted) return value
 		return new JSONRedacted(value)
 	}
@@ -57,9 +57,14 @@ type Format<T, Primitives, FactoryKey extends PropertyKey> = Prettify<
 							? never
 							: T extends object
 								? ConditionalObjectKeys<{
-										[K in keyof T as IsInTypeList<Format<T[K], Primitives, FactoryKey>, [never, undefined]> extends true
-											? never
-											: K]: Format<T[K], Primitives, FactoryKey>
+										[
+											K in keyof T as IsInTypeList<
+												Format<T[K], Primitives, FactoryKey>,
+												[never, undefined]
+											> extends true
+												? never
+												: K
+										]: Format<T[K], Primitives, FactoryKey>
 									}>
 								: never
 >
@@ -94,7 +99,8 @@ export type IsInTypeList<T, L extends any[]> = L extends [infer First, ...infer 
 
 type IsAny<T> = 0 extends 1 & T ? true : false
 type CheckSameType<A, B> = Exclude<A, B> | Exclude<B, A> extends never ? true : false
-export type IsType<A, B> = IsAny<A> extends true ? (IsAny<B> extends true ? true : CheckSameType<A, B>) : CheckSameType<A, B>
+export type IsType<A, B> =
+	IsAny<A> extends true ? (IsAny<B> extends true ? true : CheckSameType<A, B>) : CheckSameType<A, B>
 
 export type IsPlainObject<T> = T extends object
 	? T extends (...args: any[]) => any
@@ -115,7 +121,11 @@ export type Paths<T, D = never> = T extends StopTypes
 	? ''
 	: T extends object
 		? {
-				[K in keyof T & string]: T[K] extends StopTypes ? K : T[K] extends ExcludedTypes ? D : K | Dot<K, Paths<T[K]>>
+				[K in keyof T & string]: T[K] extends StopTypes
+					? K
+					: T[K] extends ExcludedTypes
+						? D
+						: K | Dot<K, Paths<T[K]>>
 			}[keyof T & string]
 		: T extends readonly any[]
 			? Paths<T[number]>

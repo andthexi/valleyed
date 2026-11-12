@@ -54,11 +54,14 @@ export const lte = (value: number, err?: string) =>
 
 export const int = (err = 'is not an integer') =>
 	standard<number, number>(
-		({ input, path }, opts) => opts.wrapError(`${input} !== parseInt(${input})`, `PipeError.root('${err}', ${input}, ${path})`),
+		({ input, path }, opts) =>
+			opts.wrapError(`${input} !== parseInt(${input})`, `PipeError.root('${err}', ${input}, ${path})`),
 		{
 			schema: () => ({ type: 'integer' }),
 		},
 	)
 
 export const asRounded = (dp = 0) =>
-	standard<number, number>(({ input, context }) => [`${input} = Number(${input}.toFixed(${context}.dp))`], { context: { dp } })
+	standard<number, number>(({ input, context }) => [`${input} = Number(${input}.toFixed(${context}.dp))`], {
+		context: { dp },
+	})

@@ -1,5 +1,15 @@
 import { createErrorHandler, PipeError } from './errors'
-import type { Context, Entry, JsonSchemaBuilder, Pipe, PipeCompiledFn, PipeErrorHandler, PipeFn, PipeMeta, PipeOutput } from './types'
+import type {
+	Context,
+	Entry,
+	JsonSchemaBuilder,
+	Pipe,
+	PipeCompiledFn,
+	PipeErrorHandler,
+	PipeFn,
+	PipeMeta,
+	PipeOutput,
+} from './types'
 import { getRandomValue } from '../../utils/functions'
 import type { JsonSchema } from '../../utils/types'
 
@@ -36,7 +46,10 @@ export function validate<T extends Pipe<any, any>>(
 		return res instanceof PipeError ? { error: res, valid: false } : { value: res, valid: true }
 	} catch (error) {
 		if (error instanceof PipeError) return { error, valid: false }
-		return { error: PipeError.root(error instanceof Error ? error.message : `${error}`, input, undefined), valid: false }
+		return {
+			error: PipeError.root(error instanceof Error ? error.message : `${error}`, input, undefined),
+			valid: false,
+		}
 	}
 }
 
@@ -132,7 +145,9 @@ export function compileNested(
 	data: {
 		pipe: Pipe<any, any>
 		errorType?: Parameters<typeof createErrorHandler>[1]
-		opts: Required<Pick<Parameters<Pipe<any, any>['compile']>[1], 'rootContext' | 'failEarly' | 'path' | 'wrapError'>>
+		opts: Required<
+			Pick<Parameters<Pipe<any, any>['compile']>[1], 'rootContext' | 'failEarly' | 'path' | 'wrapError'>
+		>
 	} & { input: string; key?: string },
 ) {
 	const random = getRandomValue()

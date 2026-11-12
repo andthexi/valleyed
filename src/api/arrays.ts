@@ -14,7 +14,13 @@ export const array = <T extends Pipe<any, any>>(branch: T, err = 'is not an arra
 			`let ${validatedVarname}`,
 			`for (let idx = 0; idx < ${input}.length; idx++) {`,
 			`	${validatedVarname} = ${input}[idx]`,
-			...compileNested({ opts, pipe: branch, input: validatedVarname, errorType: 'assign', key: validatedVarname }),
+			...compileNested({
+				opts,
+				pipe: branch,
+				input: validatedVarname,
+				errorType: 'assign',
+				key: validatedVarname,
+			}),
 			opts.failEarly
 				? `if (${validatedVarname} instanceof PipeError) ${opts.wrapError.format(`PipeError.path(idx, '${validatedVarname}', ${validatedVarname})`)}`
 				: `	if (${validatedVarname} instanceof PipeError) ${errorsVarname}.push(PipeError.path(idx, '${validatedVarname}', ${validatedVarname}))`,
@@ -52,11 +58,16 @@ export const tuple = <T extends ReadonlyArray<Pipe<any, any>>>(branches: readonl
 								errorType: 'assign',
 							}),
 							opts.failEarly
-								? opts.wrapError(`${validatedVarname}${idx} instanceof PipeError`, `${validatedVarname}${idx}`)
+								? opts.wrapError(
+										`${validatedVarname}${idx} instanceof PipeError`,
+										`${validatedVarname}${idx}`,
+									)
 								: `	if (${validatedVarname}${idx} instanceof PipeError) ${errorsVarname}.push(${validatedVarname}${idx})`,
 							`if (!(${validatedVarname}${idx} instanceof PipeError)) ${resVarname}[${idx}] = ${validatedVarname}${idx}`,
 						]),
-						opts.failEarly ? '' : opts.wrapError(`${errorsVarname}.length`, `PipeError.rootFrom(${errorsVarname})`),
+						opts.failEarly
+							? ''
+							: opts.wrapError(`${errorsVarname}.length`, `PipeError.rootFrom(${errorsVarname})`),
 						`${input} = ${resVarname}`,
 					]),
 		],
