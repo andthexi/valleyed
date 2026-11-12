@@ -43,6 +43,7 @@ describe('optionals', () => {
 
 	test('catch', () => {
 		const defaultValue = 'default'
+		// eslint-disable-next-line promise/valid-params
 		const rules = v.catch(v.string(), defaultValue)
 		expect(v.validate(rules, 'hi').valid).toBe(true)
 		expect(v.validate(rules, null).valid).toBe(true)

@@ -2,16 +2,18 @@ import { isType } from './isType'
 
 function getDiff(val1: any, val2: any, parent?: string) {
 	if (!isType.object(val1) || !isType.object(val2)) return []
-	const keys = [...new Set(Object.keys(val1).concat(Object.keys(val2)))]
+	const record1 = val1 as Record<string, unknown>
+	const record2 = val2 as Record<string, unknown>
+	const keys = [...new Set(Object.keys(record1).concat(Object.keys(record2)))]
 	const diff: string[] = []
 	for (const key of keys) {
 		const parentKey = (parent ? `${parent}.` : '') + key
-		if (!(key in val1) || !(key in val2)) {
+		if (!(key in record1) || !(key in record2)) {
 			diff.push(parentKey)
 			continue
 		}
-		const obj1 = val1[key]
-		const obj2 = val2[key]
+		const obj1 = record1[key]
+		const obj2 = record2[key]
 		if (isType.object(obj1) && isType.object(obj2)) diff.push(...getDiff(obj1, obj2, parentKey))
 		else if (!equal(obj1, obj2)) diff.push(parentKey)
 	}
@@ -48,11 +50,13 @@ export function equal(v1: unknown, v2: unknown): boolean {
 	}
 
 	if (isType.object(val1) && isType.object(val2)) {
-		const keys1 = Object.keys(val1 ?? {})
-		const keys2 = Object.keys(val2 ?? {})
+		const record1 = val1 as Record<string, unknown>
+		const record2 = val2 as Record<string, unknown>
+		const keys1 = Object.keys(record1)
+		const keys2 = Object.keys(record2)
 		if (keys1.length !== keys2.length) return false
 		const keys = [...new Set(keys1.concat(keys2))]
-		return keys.every((key) => key in val1 && key in val2 && equal(val1[key], val2[key]))
+		return keys.every((key) => key in record1 && key in record2 && equal(record1[key], record2[key]))
 	}
 
 	return false
@@ -63,10 +67,12 @@ export function diff(val1: unknown, val2: unknown) {
 }
 
 export function from(keys: string[]) {
-	const deepMerge = (from: object, to: object) =>
-		Object.entries(from ?? {}).reduce(
+	const deepMerge = (from: Record<string, unknown>, to: Record<string, unknown>): Record<string, unknown> =>
+		Object.entries(from).reduce<Record<string, unknown>>(
 			(merged, [key, obj]) => {
-				merged[key] = isType.object(obj) ? deepMerge(obj, merged[key] ?? {}) : obj
+				merged[key] = isType.object(obj)
+					? deepMerge(obj as Record<string, unknown>, (merged[key] as Record<string, unknown>) ?? {})
+					: obj
 				return merged
 			},
 			{ ...to },
@@ -81,17 +87,19 @@ export function from(keys: string[]) {
 	return keys.map(formObject).reduce(deepMerge, {})
 }
 
-export function merge(v1: unknown, v2: unknown) {
+export function merge(v1: unknown, v2: unknown): unknown {
 	if (isType.undefined(v1)) return v2
 	if (isType.undefined(v2)) return v1
 	if (isType.array(v1) && isType.array(v2)) {
-		return Array.from({ length: Math.max(v1.length, v2.length) }, (_, i) => merge(v1[i], v2[i]))
+		return Array.from({ length: Math.max(v1.length, v2.length) }, (_, i): unknown => merge(v1[i], v2[i]))
 	}
 	if (isType.object(v1) && isType.object(v2)) {
-		const keys = new Set([...Object.keys(v1), ...Object.keys(v2)])
+		const record1 = v1 as Record<string, unknown>
+		const record2 = v2 as Record<string, unknown>
+		const keys = new Set([...Object.keys(record1), ...Object.keys(record2)])
 		return Array.from(keys).reduce(
 			(acc, key) => {
-				acc[key] = merge(v1[key], v2[key])
+				acc[key] = merge(record1[key], record2[key])
 				return acc
 			},
 			{} as Record<string, any>,

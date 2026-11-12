@@ -1,7 +1,10 @@
-import config from '@k11/configs/eslint/base'
+import config from 'xi-configs/eslint/node-ts'
 
-export default config.map((c) => ({
-	...c,
-	files: ['**/*.ts'],
-	ignores: ['lib/**/*'],
-}))
+export default [
+	...config,
+	{
+		rules: {
+			'@typescript-eslint/no-explicit-any': 'off',
+		},
+	},
+]

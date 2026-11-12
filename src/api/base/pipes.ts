@@ -1,3 +1,5 @@
+import { getRandomValue } from '../../utils/functions'
+import type { JsonSchema } from '../../utils/types'
 import { createErrorHandler, PipeError } from './errors'
 import type {
 	Context,
@@ -10,8 +12,6 @@ import type {
 	PipeMeta,
 	PipeOutput,
 } from './types'
-import { getRandomValue } from '../../utils/functions'
-import type { JsonSchema } from '../../utils/types'
 
 export function walk<T>(pipe: Pipe<any, any>, init: T, nodeFn: (cur: Pipe<any, any>, acc: T) => T) {
 	let acc: T = init

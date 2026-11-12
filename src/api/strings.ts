@@ -1,7 +1,7 @@
-import type { Pipe } from './base'
-import { compileNested, context, schema, standard } from './base/pipes'
 import { capitalize, getRandomValue, stripHTML, trimToLength } from '../utils/functions'
 import { emailRegex, urlRegex } from '../utils/regexes'
+import type { Pipe } from './base'
+import { compileNested, context, schema, standard } from './base/pipes'
 
 export const email = (err = 'is not a valid email') =>
 	standard<string, string>(

@@ -87,8 +87,13 @@ export const addToArray = <T>(
 	else if (array.length === 0) array.push(item)
 	else {
 		const existingIsGreater = getComparer(array[0]) >= getComparer(item)
-		if (existingIsGreater) asc ? array.unshift(item) : array.push(item)
-		else asc ? array.push(item) : array.unshift(item)
+		if (existingIsGreater) {
+			if (asc) array.unshift(item)
+			else array.push(item)
+		} else {
+			if (asc) array.push(item)
+			else array.unshift(item)
+		}
 	}
 	return array
 }

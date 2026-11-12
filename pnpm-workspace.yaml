@@ -1,2 +1,6 @@
+autoInstallPeers: false
 allowBuilds:
     esbuild: false
+minimumReleaseAge: 1440
+minimumReleaseAgeExclude:
+    - xi-configs@0.1.0

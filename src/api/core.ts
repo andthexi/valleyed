@@ -1,6 +1,6 @@
+import { equal } from '../utils/differ'
 import { PipeError } from './base'
 import { define, standard } from './base/pipes'
-import { equal } from '../utils/differ'
 
 export const custom = <T>(condition: (input: T) => boolean, err = `doesn't pass custom rule`) =>
 	define<T, T>(

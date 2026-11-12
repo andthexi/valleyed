@@ -5,11 +5,19 @@
 	"type": "module",
 	"sideEffects": false,
 	"packageManager": "pnpm@11.7.0",
+	"engines": {
+		"node": ">=20.19"
+	},
 	"devEngines": {
 		"runtime": {
 			"name": "node",
-			"version": "24.5.0",
-			"onFail": "download"
+			"version": ">=24.5.0",
+			"onFail": "error"
+		},
+		"packageManager": {
+			"name": "pnpm",
+			"version": "11.7.0",
+			"onFail": "warn"
 		}
 	},
 	"main": "./dist/cjs/index.cjs",
@@ -30,10 +38,15 @@
 	},
 	"scripts": {
 		"dev": "tsup --watch",
-		"build": "tsup || echo 'Done'",
-		"lint": "eslint --fix src tests",
+		"build": "tsup",
+		"lint": "eslint src tests",
+		"lint:fix": "eslint --fix src tests",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"typecheck": "tsc --noEmit",
 		"test": "vitest run",
-		"release": "standard-version",
+		"prerelease": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+		"release": "commit-and-tag-version",
 		"prepare": "husky"
 	},
 	"keywords": [
@@ -48,15 +61,17 @@
 	"devDependencies": {
 		"@commitlint/cli": "^20.4.2",
 		"@commitlint/config-conventional": "^20.4.2",
-		"@k11/configs": "^0.1.2",
-		"@types/node": "^25.3.3",
+		"@types/node": "^24.0.0",
+		"@types/url-regex-safe": "^1.0.2",
+		"commit-and-tag-version": "^13.3.0",
 		"esbuild-fix-imports-plugin": "^1.0.23",
-		"eslint": "^9.39.2",
+		"eslint": "10.14.0",
 		"husky": "^9.1.7",
-		"standard-version": "^9.5.0",
+		"prettier": "3.10.1",
 		"tsup": "^8.5.1",
 		"typescript": "^5.9.3",
-		"vitest": "^4.0.18"
+		"vitest": "^4.0.18",
+		"xi-configs": "0.1.0"
 	},
 	"files": [
 		"LICENSE",
@@ -80,5 +95,5 @@
 		"@standard-schema/spec": "^1.1.0",
 		"url-regex-safe": "^4.0.0"
 	},
-	"standard-version": {}
+	"commit-and-tag-version": {}
 }

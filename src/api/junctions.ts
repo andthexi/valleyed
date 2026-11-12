@@ -1,7 +1,7 @@
-import type { Pipe, PipeInput, PipeOutput } from './base'
 import { merge as differMerge } from '../utils/differ'
 import { getRandomValue, wrapInTryCatch } from '../utils/functions'
 import { JSONRedacted } from '../utils/types'
+import type { Pipe, PipeInput, PipeOutput } from './base'
 import { compileNested, context, define, schema, standard, validate } from './base/pipes'
 
 export const or = <T extends Pipe<any, any>[]>(branches: T) => {

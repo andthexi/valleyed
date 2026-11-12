@@ -1,9 +1,9 @@
 export const isType = {
 	string: (v: unknown): v is string => v?.constructor?.name === 'String',
 	regex: (v: unknown): v is RegExp => v?.constructor?.name === 'RegExp',
-	symbol: (v: unknown): v is Symbol => v?.constructor?.name === 'Symbol',
-	function: (v: unknown): v is Function => v?.constructor?.name === 'Function',
-	bigint: (v: unknown): v is BigInt => v?.constructor?.name === 'BigInt',
+	symbol: (v: unknown): v is symbol => v?.constructor?.name === 'Symbol',
+	function: (v: unknown): v is (...args: unknown[]) => unknown => v?.constructor?.name === 'Function',
+	bigint: (v: unknown): v is bigint => v?.constructor?.name === 'BigInt',
 	number: (v: unknown): v is number => v?.constructor?.name === 'Number' && !Number.isNaN(v),
 	nan: (v: unknown): v is number => Number.isNaN(v),
 	null: (v: unknown): v is null => v === null,

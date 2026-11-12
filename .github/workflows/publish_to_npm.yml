@@ -1,16 +1,20 @@
-name: Publish To NPM
+name: Publish Release
 
 on:
-    release:
-        types:
-            - created
+    push:
+        tags:
+            - 'v*'
+
+concurrency:
+    group: release-${{ github.ref }}
+    cancel-in-progress: false
 
 jobs:
-    publish-npm:
+    publish:
         runs-on: ubuntu-latest
         permissions:
             id-token: write
-            contents: read
+            contents: write
         steps:
             - uses: actions/checkout@v6
 
@@ -25,8 +29,17 @@ jobs:
               with:
                   node-version: 24.5.0
                   registry-url: 'https://registry.npmjs.org'
+                  package-manager-cache: false
 
             - run: pnpm install --frozen-lockfile --prefer-offline --ignore-scripts
-            - run: pnpm test
             - run: pnpm build
-            - run: NODE_AUTH_TOKEN="" npm publish
+
+            - name: Verify tag matches package version
+              run: test "${GITHUB_REF_NAME}" = "v$(node -p \"require('./package.json').version\")"
+
+            - run: npm publish
+
+            - name: Create GitHub release
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-file CHANGELOG.md

@@ -1,7 +1,7 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 
-import { PipeError } from './errors'
 import type { JsonSchema } from '../../utils/types'
+import type { PipeError } from './errors'
 
 export type PipeFn<I, O> = (input: I) => O | PipeError
 export type PipeCompiledFn<T extends Pipe<any, any>> = (input: unknown) => PipeOutput<T> | PipeError

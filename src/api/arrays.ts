@@ -1,6 +1,6 @@
+import { getRandomValue } from '../utils/functions'
 import type { PipeInput, Pipe, PipeOutput } from './base'
 import { standard, schema, compileNested } from './base/pipes'
-import { getRandomValue } from '../utils/functions'
 
 export const array = <T extends Pipe<any, any>>(branch: T, err = 'is not an array') => {
 	const errorsVarname = `errors_${getRandomValue()}`

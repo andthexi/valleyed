@@ -1,6 +1,6 @@
+import { getRandomValue } from '../utils/functions'
 import type { PipeInput, PipeOutput, Pipe } from './base'
 import { compileNested, context, schema, standard } from './base/pipes'
-import { getRandomValue } from '../utils/functions'
 
 type ObjectPipe<T extends Record<string, Pipe<any, any>>> = Pipe<
 	{ [K in keyof T]: PipeInput<T[K]> },

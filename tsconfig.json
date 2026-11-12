@@ -1,5 +1,5 @@
 {
-	"extends": "@k11/configs/tsconfig/lib",
+	"extends": "xi-configs/tsconfig/node-library",
 	"compilerOptions": {
 		"types": ["@types/node"]
 	},

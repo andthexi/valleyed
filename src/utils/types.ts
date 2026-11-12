@@ -53,7 +53,7 @@ type Format<T, Primitives, FactoryKey extends PropertyKey> = Prettify<
 					? Format<U, Primitives, FactoryKey>[]
 					: T extends Record<FactoryKey, (...args: any[]) => any>
 						? Format<ReturnType<T[FactoryKey]>, Primitives, FactoryKey>
-						: T extends Function
+						: T extends (...args: never[]) => unknown
 							? never
 							: T extends object
 								? ConditionalObjectKeys<{

@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest'
 
+import type { Pipe } from '../../src'
 import { v } from '../../src'
 
 describe('junctions', () => {
@@ -104,7 +105,11 @@ describe('junctions', () => {
 	})
 
 	test('recursive', () => {
-		const rules = v.recursive(() => v.object({ value: v.number(), left: v.optional(rules) }), 'Node')
+		type Node = { value: number; left?: Node }
+		const rules: Pipe<Node, Node> = v.recursive(
+			() => v.object({ value: v.number(), left: v.optional(rules) }),
+			'Node',
+		)
 		expect(v.validate(rules, { value: 1 }).valid).toBe(true)
 		expect(v.validate(rules, { value: 1, left: { value: 2 } }).valid).toBe(true)
 		expect(v.validate(rules, { value: 1, left: null }).valid).toBe(false)

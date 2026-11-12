@@ -1,5 +1,5 @@
-import { standard } from './base/pipes'
 import { getRandomValue } from '../utils/functions'
+import { standard } from './base/pipes'
 
 export type Timeable = Date | string | number
 

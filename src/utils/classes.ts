@@ -18,12 +18,12 @@ type Accessor<Keys extends object> = {
 
 function WrapWithProperties(): { new <Keys extends Record<string, unknown>>(): Keys } {
 	return class {
-		[customInspectSymbol](_, options, inspect) {
+		[customInspectSymbol](_depth: number, options: util.InspectOptionsStylized, inspect: typeof util.inspect) {
 			options.getters = true
 			options.numericSeparator = true
 			options.depth = Number.MAX_SAFE_INTEGER
 			return (
-				options.stylize(this.constructor.name, options) +
+				options.stylize(this.constructor.name, 'special') +
 				' ' +
 				inspect((this as any).toJSON?.() ?? this, options)
 			)
@@ -59,8 +59,9 @@ export class DataClass<Keys extends object> extends __Root<Keys> {
 
 	toJSON(): JSONValueOf<Keys> {
 		const json: Record<string, any> = {}
-		Object.keys(this).forEach((key) => {
-			const value = this[key]
+		const values = this as Record<string, unknown>
+		Object.keys(values).forEach((key) => {
+			const value = values[key]
 			if (typeof value === 'function' || value === undefined) return
 			json[key] = wrapInTryCatch(() => (value as any)?.toJSON?.() ?? structuredClone(value), value)
 		})
