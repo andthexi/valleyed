@@ -22,7 +22,7 @@ jobs:
               name: Install pnpm
               id: pnpm-install
               with:
-                  version: 11.7.0
+                  version: 12.19.0
 
             - name: Setup node
               uses: actions/setup-node@v6

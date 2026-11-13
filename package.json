@@ -4,7 +4,7 @@
 	"description": "A lightweight package with definitions for various validation rules, and helper services to consume said rules.",
 	"type": "module",
 	"sideEffects": false,
-	"packageManager": "pnpm@11.7.0",
+	"packageManager": "pnpm@12.19.0",
 	"engines": {
 		"node": ">=20.19"
 	},
@@ -16,7 +16,7 @@
 		},
 		"packageManager": {
 			"name": "pnpm",
-			"version": "11.7.0",
+			"version": "12.19.0",
 			"onFail": "warn"
 		}
 	},
